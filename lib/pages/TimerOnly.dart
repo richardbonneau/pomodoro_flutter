@@ -14,6 +14,21 @@ class TimerOnlyState extends State<TimerOnly> {
   int currentMinutes = 0;
   int currentSeconds = 0;
 
+  // Pause Button
+  Icon pauseOrPlayIcon = Icon(Icons.pause_circle_filled);
+  bool isTimerPaused = false;
+  onPressPause() {
+    if (!isTimerPaused)
+      this.setState(() => {
+      isTimerPaused = true,
+        pauseOrPlayIcon = Icon(Icons.play_circle_filled)
+      });
+    else{
+    isTimerPaused = false;
+    this.setState(() => pauseOrPlayIcon = Icon(Icons.pause_circle_filled));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +39,8 @@ class TimerOnlyState extends State<TimerOnly> {
     return new Scaffold(
       backgroundColor: Color(0xFF18435A),
       body: SafeArea(
-        child: Flexible(
+        child: Container(
+          alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,7 +52,7 @@ class TimerOnlyState extends State<TimerOnly> {
                       ":" +
                       globalSeconds.toString(),
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
-              SizedBox(height: 30.0),
+              SizedBox(height: 0.0),
               Text(
                   currentHours.toString() +
                       ":" +
@@ -47,16 +63,17 @@ class TimerOnlyState extends State<TimerOnly> {
                       color: Colors.white,
                       fontSize: 70.0,
                       fontFamily: 'Roboto Condensed')),
+              IconButton(icon: pauseOrPlayIcon, onPressed: this.onPressPause),
               Text(
-                "Current State",
+                "FOCUS",
                 style: TextStyle(
-                    fontFamily: 'Roboto Condensed', color: Colors.white),
+                    fontFamily: 'Roboto Condensed',
+                    color: Colors.white,
+                    fontSize: 20.0),
               ),
-              SizedBox(
-                height: 10.0,
-              ),
+              SizedBox(height: 0.0),
               Text(
-                "Next State",
+                "Coming up : Small break",
                 style: TextStyle(
                     fontFamily: 'Roboto Condensed', color: Colors.white),
               ),
