@@ -24,65 +24,44 @@ class TimerOnlyState extends State<TimerOnly> {
     return new Scaffold(
       backgroundColor: Color(0xFF18435A),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                          globalHours.toString() +
-                              ":" +
-                              globalMinutes.toString() +
-                              ":" +
-                              globalSeconds.toString(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 19.0,
-                              fontFamily: 'Roboto Condensed')),
-                    ],
-                  ),
-                  SizedBox(height: 30.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                          currentHours.toString() +
-                              ":" +
-                              currentMinutes.toString() +
-                              ":" +
-                              currentSeconds.toString(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35.0,
-                              fontFamily: 'Roboto Condensed')),
-                    ],
-                  ),
-                  SizedBox(height: 30.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Current State",
-                          style: TextStyle(
-                              fontFamily: 'Roboto Condensed',
-                              color: Colors.white)),
-                    ],
-                  )
-                ]),
-            Column(
-              children: <Widget>[
-                Container(
-                  constraints: BoxConstraints.expand(
-                    height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 200.0,
-                  ),
-                  color:Colors.white,
-                child:Text("hi")
-              )],
-            )
-          ],
+        child: Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                  globalHours.toString() +
+                      ":" +
+                      globalMinutes.toString() +
+                      ":" +
+                      globalSeconds.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 20.0)),
+              SizedBox(height: 30.0),
+              Text(
+                  currentHours.toString() +
+                      ":" +
+                      currentMinutes.toString() +
+                      ":" +
+                      currentSeconds.toString(),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 70.0,
+                      fontFamily: 'Roboto Condensed')),
+              Text(
+                "Current State",
+                style: TextStyle(
+                    fontFamily: 'Roboto Condensed', color: Colors.white),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                "Next State",
+                style: TextStyle(
+                    fontFamily: 'Roboto Condensed', color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
