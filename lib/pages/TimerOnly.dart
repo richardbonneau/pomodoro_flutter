@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class TimerOnly extends StatefulWidget {
   @override
@@ -6,9 +7,9 @@ class TimerOnly extends StatefulWidget {
 }
 
 class TimerOnlyState extends State<TimerOnly> {
-  int globalHours = 1;
-  int globalMinutes = 0;
-  int globalSeconds = 0;
+  DateTime startingTime = DateTime.now();
+
+  String timeWorked = "0:00:00";
 
   int currentHours = 0;
   int currentMinutes = 0;
@@ -20,18 +21,26 @@ class TimerOnlyState extends State<TimerOnly> {
   onPressPause() {
     if (!isTimerPaused)
       this.setState(() => {
-      isTimerPaused = true,
-        pauseOrPlayIcon = Icon(Icons.play_circle_filled)
-      });
-    else{
-    isTimerPaused = false;
-    this.setState(() => pauseOrPlayIcon = Icon(Icons.pause_circle_filled));
+            isTimerPaused = true,
+            pauseOrPlayIcon = Icon(Icons.play_circle_filled),
+          });
+    else {
+      isTimerPaused = false;
+      this.setState(() => pauseOrPlayIcon = Icon(Icons.pause_circle_filled));
     }
   }
 
   @override
   void initState() {
     super.initState();
+
+    Timer.periodic(new Duration(seconds: 1), (timer) {
+      Duration currentTime = DateTime.now().difference(startingTime);
+      String stringifiedTime = currentTime.toString().substring(0, 7);
+      print(stringifiedTime);
+
+      this.setState(() => {timeWorked = stringifiedTime});
+    });
   }
 
   @override
@@ -45,12 +54,7 @@ class TimerOnlyState extends State<TimerOnly> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                  globalHours.toString() +
-                      ":" +
-                      globalMinutes.toString() +
-                      ":" +
-                      globalSeconds.toString(),
+              Text(timeWorked,
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
               SizedBox(height: 0.0),
               Text(
