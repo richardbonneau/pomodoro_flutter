@@ -20,6 +20,7 @@ class TimerOnlyState extends State<TimerOnly> {
     "Big Break"
   ];
 
+  String remainingTime = "0:00:00";
   DateTime phaseStartingTime = DateTime.now();
   var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
@@ -60,8 +61,11 @@ class TimerOnlyState extends State<TimerOnly> {
       String stringifiedElapsedTime = elapsedTime.toString().substring(0, 7);
 
       //  Phase Timer
-      Duration timeLeft = DateTime.now().difference(phaseStartingTime);
-      print(timeLeft);
+      Duration remainingTIme = phaseStartingTime.difference(DateTime.now()) +
+          Duration(minutes: phaseTimes[phases[currentPhaseIndex]]);
+      String stringifiedRemainingTIme =
+          remainingTIme.toString().substring(0, 7);
+
       this.setState(() {
         timeWorked = stringifiedElapsedTime;
       });
