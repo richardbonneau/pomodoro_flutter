@@ -8,26 +8,46 @@ class TimerOnly extends StatefulWidget {
 
 class TimerOnlyState extends State<TimerOnly> {
   DateTime startingTime = DateTime.now();
-
   String timeWorked = "0:00:00";
+  List<String> phases = [
+    "FOCUS",
+    "Small Break",
+    "FOCUS",
+    "Small Break",
+    "FOCUS",
+    "Small Break",
+    "FOCUS",
+    "Big Break"
+  ];
 
-  int currentHours = 0;
-  int currentMinutes = 0;
-  int currentSeconds = 0;
+  DateTime phaseStartingTime = DateTime.now();
+  var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
+  int currentPhaseIndex = 0;
+  int nextPhaseIndex = 1;
 
   // Pause Button
   Icon pauseOrPlayIcon = Icon(Icons.pause_circle_filled);
   bool isTimerPaused = false;
   onPressPause() {
     if (!isTimerPaused)
-      this.setState(() => {
-            isTimerPaused = true,
-            pauseOrPlayIcon = Icon(Icons.play_circle_filled),
-          });
+      this.setState(() {
+        isTimerPaused = true;
+        pauseOrPlayIcon = Icon(Icons.play_circle_filled);
+      });
     else {
       isTimerPaused = false;
       this.setState(() => pauseOrPlayIcon = Icon(Icons.pause_circle_filled));
     }
+  }
+
+  goToNextPhase() {
+    this.setState(() {
+      currentPhaseIndex = nextPhaseIndex;
+      if (currentPhaseIndex == 7)
+        nextPhaseIndex = 0;
+      else
+        nextPhaseIndex = nextPhaseIndex + 1;
+    });
   }
 
   @override
@@ -35,11 +55,16 @@ class TimerOnlyState extends State<TimerOnly> {
     super.initState();
 
     Timer.periodic(new Duration(seconds: 1), (timer) {
-      Duration currentTime = DateTime.now().difference(startingTime);
-      String stringifiedTime = currentTime.toString().substring(0, 7);
-      print(stringifiedTime);
+      //  Global Time Worked
+      Duration elapsedTime = DateTime.now().difference(startingTime);
+      String stringifiedElapsedTime = elapsedTime.toString().substring(0, 7);
 
-      this.setState(() => {timeWorked = stringifiedTime});
+      //  Phase Timer
+      Duration timeLeft = DateTime.now().difference(phaseStartingTime);
+      print(timeLeft);
+      this.setState(() {
+        timeWorked = stringifiedElapsedTime;
+      });
     });
   }
 
@@ -57,19 +82,14 @@ class TimerOnlyState extends State<TimerOnly> {
               Text(timeWorked,
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
               SizedBox(height: 0.0),
-              Text(
-                  currentHours.toString() +
-                      ":" +
-                      currentMinutes.toString() +
-                      ":" +
-                      currentSeconds.toString(),
+              Text("00:00",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 70.0,
                       fontFamily: 'Roboto Condensed')),
               IconButton(icon: pauseOrPlayIcon, onPressed: this.onPressPause),
               Text(
-                "FOCUS",
+                phases[currentPhaseIndex],
                 style: TextStyle(
                     fontFamily: 'Roboto Condensed',
                     color: Colors.white,
@@ -77,7 +97,7 @@ class TimerOnlyState extends State<TimerOnly> {
               ),
               SizedBox(height: 0.0),
               Text(
-                "Coming up : Small break",
+                "Coming up : " + phases[nextPhaseIndex],
                 style: TextStyle(
                     fontFamily: 'Roboto Condensed', color: Colors.white),
               ),
