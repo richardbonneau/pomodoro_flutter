@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
 
 class TimerApp extends StatefulWidget {
   @override
@@ -22,14 +23,14 @@ class TimerAppState extends State<TimerApp> {
 
   String remainingTimeUntilNextPhase = "00:00";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
+  var phaseTimes = {"FOCUS": 1, "Small Break": 1, "Big Break": 1};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
 
   // Pause Button
   bool isAppPaused = false;
   Duration appPauseDuration = Duration();
-  Icon pauseOrPlayIcon = Icon(Icons.pause_circle_filled);
+  Icon pauseOrPlayIcon = Icon(Icons.pause);
   onPressPause() {
     if (!isAppPaused)
       this.setState(() {
@@ -43,36 +44,55 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() {
-    this.setState(() {
+    if(mounted)this.setState(() {
+      phaseStartingTime = DateTime.now();
+      appPauseDuration = Duration();
+      remainingTimeUntilNextPhase = "00:00";
       currentPhaseIndex = nextPhaseIndex;
       if (currentPhaseIndex == 7)
         nextPhaseIndex = 0;
       else
         nextPhaseIndex = nextPhaseIndex + 1;
     });
+
   }
 
   @override
   void initState() {
     super.initState();
 
-    Timer.periodic(new Duration(seconds: 1), (timer) {
-      if (isAppPaused)
+    Timer.periodic(Duration(seconds: 1), (timer) {
+
+      if (remainingTimeUntilNextPhase == "00:01")
+        this.goToNextPhase();
+      else if (isAppPaused)
         appPauseDuration = appPauseDuration + Duration(seconds: 1);
+
       //  Global Time Worked
       Duration elapsedTime = DateTime.now().difference(startingTime);
       String stringifiedElapsedTime = elapsedTime.toString().substring(0, 7);
 
+
       //  Phase Timer
       Duration remainingTime = phaseStartingTime.difference(DateTime.now()) +
-          Duration(minutes: phaseTimes[phases[currentPhaseIndex]], seconds: 1)+ appPauseDuration;
-      String stringifiedRemainingTIme =
-          remainingTime.toString().substring(2, 7);
+          Duration(minutes: phaseTimes[phases[currentPhaseIndex]]) +
+          appPauseDuration;
 
-      this.setState(() {
-        timeWorked = stringifiedElapsedTime;
-        remainingTimeUntilNextPhase = stringifiedRemainingTIme;
-      });
+      String stringifiedRemainingMinutes =
+          remainingTime.toString().substring(2, 5);
+      // We need to math.round the seconds, otherwise, the app skips seconds sometimes.
+      print('--remainingTime--');
+      print(remainingTime);
+      String stringifiedRemainingSeconds = double.parse(remainingTime.toString().substring(5,14)).round().toString();
+      print(stringifiedRemainingSeconds);
+      String stringifiedRemainingTime = stringifiedRemainingMinutes + stringifiedRemainingSeconds;
+
+      if (mounted) {
+        this.setState(() {
+          timeWorked = stringifiedElapsedTime;
+          remainingTimeUntilNextPhase = stringifiedRemainingTime;
+        });
+      }
     });
   }
 

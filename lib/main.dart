@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:pomodoro/pages/TimerOnly.dart';
+import 'package:pomodoro/pages/TimerApp.dart';
 
 void main() => runApp(MyApp());
 
