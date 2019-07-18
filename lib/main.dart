@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
         statusBarColor: Color(0xFF13293D),
         statusBarIconBrightness: Brightness.light));
     return MaterialApp(
-      home: new TimerOnly()
+      home: new TimerApp()
     );
   }
 }
