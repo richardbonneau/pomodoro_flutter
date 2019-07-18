@@ -22,7 +22,7 @@ class TimerAppState extends State<TimerApp> {
 
   String remainingTimeUntilNextPhase = "00:00";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"FOCUS": 1, "Small Break": 1, "Big Break": 1};
+  var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
 
