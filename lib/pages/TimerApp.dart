@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 class TimerApp extends StatefulWidget {
   @override
@@ -61,6 +64,10 @@ class TimerAppState extends State<TimerApp> {
   @override
   void initState() {
     super.initState();
+    print("....");
+    print(_firebaseMessaging.getToken());
+    print("....");
+    _firebaseMessaging.configure(onMessage:);
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTimeUntilNextPhase == "00:01")
