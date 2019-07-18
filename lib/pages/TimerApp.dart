@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:math';
 
 class TimerApp extends StatefulWidget {
   @override
@@ -44,17 +43,18 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() {
-    if(mounted)this.setState(() {
-      phaseStartingTime = DateTime.now();
-      appPauseDuration = Duration();
-      remainingTimeUntilNextPhase = "00:00";
-      currentPhaseIndex = nextPhaseIndex;
-      if (currentPhaseIndex == 7)
-        nextPhaseIndex = 0;
-      else
-        nextPhaseIndex = nextPhaseIndex + 1;
-    });
-
+    print("go to next phase");
+    if (mounted)
+      this.setState(() {
+        phaseStartingTime = DateTime.now();
+        appPauseDuration = Duration();
+        remainingTimeUntilNextPhase = "00:00";
+        currentPhaseIndex = nextPhaseIndex;
+        if (currentPhaseIndex == 7)
+          nextPhaseIndex = 0;
+        else
+          nextPhaseIndex = nextPhaseIndex + 1;
+      });
   }
 
   @override
@@ -62,7 +62,8 @@ class TimerAppState extends State<TimerApp> {
     super.initState();
 
     Timer.periodic(Duration(seconds: 1), (timer) {
-
+      print("remainingTimeUntilNextPhase");
+      print(remainingTimeUntilNextPhase);
       if (remainingTimeUntilNextPhase == "00:01")
         this.goToNextPhase();
       else if (isAppPaused)
@@ -72,7 +73,6 @@ class TimerAppState extends State<TimerApp> {
       Duration elapsedTime = DateTime.now().difference(startingTime);
       String stringifiedElapsedTime = elapsedTime.toString().substring(0, 7);
 
-
       //  Phase Timer
       Duration remainingTime = phaseStartingTime.difference(DateTime.now()) +
           Duration(minutes: phaseTimes[phases[currentPhaseIndex]]) +
@@ -80,12 +80,18 @@ class TimerAppState extends State<TimerApp> {
 
       String stringifiedRemainingMinutes =
           remainingTime.toString().substring(2, 5);
-      // We need to math.round the seconds, otherwise, the app skips seconds sometimes.
+      // We need to math.round the microseconds, otherwise, the app skips seconds sometimes.
       print('--remainingTime--');
       print(remainingTime);
-      String stringifiedRemainingSeconds = double.parse(remainingTime.toString().substring(5,14)).round().toString();
-      print(stringifiedRemainingSeconds);
-      String stringifiedRemainingTime = stringifiedRemainingMinutes + stringifiedRemainingSeconds;
+      String stringifiedRemainingSeconds =
+          double.parse(remainingTime.toString().substring(5, 14))
+              .round()
+              .toString();
+      if (stringifiedRemainingSeconds.length == 1)
+        stringifiedRemainingSeconds = "0" + stringifiedRemainingSeconds;
+
+      String stringifiedRemainingTime =
+          stringifiedRemainingMinutes + stringifiedRemainingSeconds;
 
       if (mounted) {
         this.setState(() {
