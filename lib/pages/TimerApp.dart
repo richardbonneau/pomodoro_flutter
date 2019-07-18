@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/services.dart';
 
 class TimerApp extends StatefulWidget {
   @override
@@ -8,7 +9,7 @@ class TimerApp extends StatefulWidget {
 
 class TimerAppState extends State<TimerApp> {
   DateTime startingTime = DateTime.now();
-  String timeWorked = "0:00:00";
+  String timeWorked = "0:00:01";
   List<String> phases = [
     "FOCUS",
     "Small Break",
@@ -20,7 +21,7 @@ class TimerAppState extends State<TimerApp> {
     "Big Break"
   ];
 
-  String remainingTimeUntilNextPhase = "00:00";
+  String remainingTimeUntilNextPhase = "24:59";
   DateTime phaseStartingTime = DateTime.now();
   var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
@@ -31,6 +32,7 @@ class TimerAppState extends State<TimerApp> {
   Duration appPauseDuration = Duration();
   Icon pauseOrPlayIcon = Icon(Icons.pause);
   onPressPause() {
+    SystemSound.play(SystemSoundType.click);
     if (!isAppPaused)
       this.setState(() {
         isAppPaused = true;
@@ -43,7 +45,6 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() {
-    print("go to next phase");
     if (mounted)
       this.setState(() {
         phaseStartingTime = DateTime.now();
@@ -62,15 +63,14 @@ class TimerAppState extends State<TimerApp> {
     super.initState();
 
     Timer.periodic(Duration(seconds: 1), (timer) {
-      print("remainingTimeUntilNextPhase");
-      print(remainingTimeUntilNextPhase);
       if (remainingTimeUntilNextPhase == "00:01")
         this.goToNextPhase();
       else if (isAppPaused)
         appPauseDuration = appPauseDuration + Duration(seconds: 1);
 
       //  Global Time Worked
-      Duration elapsedTime = DateTime.now().difference(startingTime);
+      Duration elapsedTime =
+          DateTime.now().difference(startingTime) + Duration(seconds: 1);
       String stringifiedElapsedTime = elapsedTime.toString().substring(0, 7);
 
       //  Phase Timer
@@ -81,12 +81,10 @@ class TimerAppState extends State<TimerApp> {
       String stringifiedRemainingMinutes =
           remainingTime.toString().substring(2, 5);
       // We need to math.round the microseconds, otherwise, the app skips seconds sometimes.
-      print('--remainingTime--');
-      print(remainingTime);
       String stringifiedRemainingSeconds =
-          double.parse(remainingTime.toString().substring(5, 14))
-              .round()
+          (double.parse(remainingTime.toString().substring(5, 14)).round() - 1)
               .toString();
+
       if (stringifiedRemainingSeconds.length == 1)
         stringifiedRemainingSeconds = "0" + stringifiedRemainingSeconds;
 
