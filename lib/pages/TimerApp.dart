@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:pomodoro/model/message.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -64,10 +65,19 @@ class TimerAppState extends State<TimerApp> {
   @override
   void initState() {
     super.initState();
-    print("....");
-    print(_firebaseMessaging.getToken());
-    print("....");
-    _firebaseMessaging.configure(onMessage:);
+    var firebaseToken;
+    _firebaseMessaging.getToken().then((token) {
+      firebaseToken = token;
+      print(firebaseToken);
+    });
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+      print("message received");
+      print(message);
+    });
+
+    // request message permission for ios?
+    // create list view with all messages?
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTimeUntilNextPhase == "00:01")
