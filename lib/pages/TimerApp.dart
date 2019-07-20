@@ -65,6 +65,8 @@ class TimerAppState extends State<TimerApp> {
   @override
   void initState() {
     super.initState();
+
+    //  Firebase base config
     var firebaseToken;
     _firebaseMessaging.getToken().then((token) {
       firebaseToken = token;
@@ -73,14 +75,8 @@ class TimerAppState extends State<TimerApp> {
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           AudioCache audioCache = AudioCache();
-//          audioCache.load("notification.wav");
           await audioCache.play("notification.wav");
-          print("message received");
-          print(message);
     });
-
-    // request message permission for ios?
-    // create list view with all messages?
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (remainingTimeUntilNextPhase == "00:01")
