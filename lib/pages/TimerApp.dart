@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:pomodoro/model/message.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -72,8 +72,11 @@ class TimerAppState extends State<TimerApp> {
     });
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-      print("message received");
-      print(message);
+          AudioCache audioCache = AudioCache();
+//          audioCache.load("notification.wav");
+          await audioCache.play("notification.wav");
+          print("message received");
+          print(message);
     });
 
     // request message permission for ios?
