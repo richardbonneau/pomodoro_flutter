@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:audioplayers/audio_cache.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+AudioCache audioCache = AudioCache();
 
 class TimerApp extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class TimerAppState extends State<TimerApp> {
 
   String remainingTimeUntilNextPhase = "24:59";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"FOCUS": 25, "Small Break": 5, "Big Break": 30};
+  var phaseTimes = {"FOCUS": 1, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
 
@@ -35,14 +36,17 @@ class TimerAppState extends State<TimerApp> {
   bool isAppPaused = false;
   Duration appPauseDuration = Duration();
   Icon pauseOrPlayIcon = Icon(Icons.pause);
-  onPressPause() {
-    SystemSound.play(SystemSoundType.click);
-    if (!isAppPaused)
+  onPressPause() async {
+    if (!isAppPaused){
+      await audioCache.play("pause.wav");
       this.setState(() {
         isAppPaused = true;
+
         pauseOrPlayIcon = Icon(Icons.play_arrow);
       });
+    }
     else {
+      await audioCache.play("play.wav");
       isAppPaused = false;
       this.setState(() => pauseOrPlayIcon = Icon(Icons.pause));
     }
@@ -74,8 +78,9 @@ class TimerAppState extends State<TimerApp> {
     });
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-          AudioCache audioCache = AudioCache();
-          await audioCache.play("notification.wav");
+          if(phases[currentPhaseIndex] == "FOCUS") await audioCache.play("resume_work.wav");
+          else await audioCache.play("phase_finished.wav");
+
     });
 
     Timer.periodic(Duration(seconds: 1), (timer) {
