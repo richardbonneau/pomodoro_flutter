@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:pomodoro/utils/SendNotification.dart';
@@ -18,8 +17,6 @@ Future<SendNotification> sendPost({Map body}) async {
     "key=AAAA_WFZUOY:APA91bEK03Ls6a90pnkb48VNKKeFjCAeOJYwuRYe2AqbQLTyXgBz-Ctg6Da-vAblgrlzjHk61JIVY1fnIk9PZoRDs8byNHzuoVHgDCJ3HKbO-rWpzApAxn-NVZBT7ZlMrzHKstbprfKX",
 //    "content-type": "application/json"
   },body: body, ).then((dynamic response) {
-
-    print(response.request);
     print(response.statusCode);
     print("---");
   });

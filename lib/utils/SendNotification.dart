@@ -1,4 +1,3 @@
-import 'package:http/http.dart';
 import 'dart:convert';
 
 class SendNotification {
@@ -25,10 +24,8 @@ class SendNotification {
     details['sound'] = sound;
     details['click_action']= 'FLUTTER_NOTIFICATION_CLICK';
     details['priority'] = 'high';
-    var send = json.encode(details);
     map["to"] = id;
-    map["notification"] = send;
-    print(map);
+    map["notification"] = json.encode(details);
 
     return map;
   }
