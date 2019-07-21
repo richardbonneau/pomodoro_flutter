@@ -3,9 +3,27 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:pomodoro/utils/SendNotification.dart';
+import 'package:http/http.dart' as http;
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 AudioCache audioCache = AudioCache();
+var firebaseToken;
+
+Future<SendNotification> sendPost({Map body}) async {
+  print("body");
+  print(body);
+  return http.post('https://fcm.googleapis.com/fcm/send', headers: {
+    "Authorization":
+    "key=AAAA_WFZUOY:APA91bEK03Ls6a90pnkb48VNKKeFjCAeOJYwuRYe2AqbQLTyXgBz-Ctg6Da-vAblgrlzjHk61JIVY1fnIk9PZoRDs8byNHzuoVHgDCJ3HKbO-rWpzApAxn-NVZBT7ZlMrzHKstbprfKX",
+//    "Content-Type": "application/json"
+  },body: body, ).then((dynamic response) {
+
+    print(response.request);
+    print(response.statusCode);
+    print("---");
+  });
+}
 
 class TimerApp extends StatefulWidget {
   @override
@@ -37,15 +55,14 @@ class TimerAppState extends State<TimerApp> {
   Duration appPauseDuration = Duration();
   Icon pauseOrPlayIcon = Icon(Icons.pause);
   onPressPause() async {
-    if (!isAppPaused){
+    if (!isAppPaused) {
       await audioCache.play("pause.wav");
       this.setState(() {
         isAppPaused = true;
 
         pauseOrPlayIcon = Icon(Icons.play_arrow);
       });
-    }
-    else {
+    } else {
       await audioCache.play("play.wav");
       isAppPaused = false;
       this.setState(() => pauseOrPlayIcon = Icon(Icons.pause));
@@ -71,16 +88,17 @@ class TimerAppState extends State<TimerApp> {
     super.initState();
 
     //  Firebase base config
-    var firebaseToken;
     _firebaseMessaging.getToken().then((token) {
       firebaseToken = token;
       print(firebaseToken);
     });
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-          if(phases[currentPhaseIndex] == "FOCUS") await audioCache.play("resume_work.wav");
-          else await audioCache.play("phase_finished.wav");
-
+          print("received a message");
+      if (phases[currentPhaseIndex] == "FOCUS")
+        await audioCache.play("resume_work.wav");
+      else
+        await audioCache.play("phase_finished.wav");
     });
 
     Timer.periodic(Duration(seconds: 1), (timer) {
@@ -153,6 +171,20 @@ class TimerAppState extends State<TimerApp> {
                 onPressed: this.onPressPause,
                 iconSize: 40.0,
                 color: Colors.white,
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  print("pressed");
+                  SendNotification sendNotification = SendNotification(
+                      id: firebaseToken,
+                      title: "title",
+                      body: "body",
+                      sound: "default");
+
+                  SendNotification s =
+                      await sendPost(body: sendNotification.toMap());
+                  print(s);
+                },
               ),
               SizedBox(height: 0.0),
               Text(
