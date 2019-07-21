@@ -16,7 +16,7 @@ Future<SendNotification> sendPost({Map body}) async {
   return http.post('https://fcm.googleapis.com/fcm/send', headers: {
     "Authorization":
     "key=AAAA_WFZUOY:APA91bEK03Ls6a90pnkb48VNKKeFjCAeOJYwuRYe2AqbQLTyXgBz-Ctg6Da-vAblgrlzjHk61JIVY1fnIk9PZoRDs8byNHzuoVHgDCJ3HKbO-rWpzApAxn-NVZBT7ZlMrzHKstbprfKX",
-//    "Content-Type": "application/json"
+//    "content-type": "application/json"
   },body: body, ).then((dynamic response) {
 
     print(response.request);
@@ -102,6 +102,8 @@ class TimerAppState extends State<TimerApp> {
     });
 
     Timer.periodic(Duration(seconds: 1), (timer) {
+
+
       if (remainingTimeUntilNextPhase == "00:01")
         this.goToNextPhase();
       else if (isAppPaused)

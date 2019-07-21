@@ -1,4 +1,5 @@
 import 'package:http/http.dart';
+import 'dart:convert';
 
 class SendNotification {
   final String id;
@@ -18,11 +19,15 @@ class SendNotification {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["id"] = id;
-    map["title"] = title;
-    map["body"] = body;
-    map['sound'] = sound;
-    map['click_action']= 'FLUTTER_NOTIFICATION_CLICK';
+    var details = new Map<String, String>();
+    details["title"] = title;
+    details["body"] = body;
+    details['sound'] = sound;
+    details['click_action']= 'FLUTTER_NOTIFICATION_CLICK';
+    var send = json.encode(details);
+    map["to"] = id;
+    map["notification"] = send;
+    print(map);
 
     return map;
   }
