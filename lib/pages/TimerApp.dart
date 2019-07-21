@@ -69,7 +69,42 @@ class TimerAppState extends State<TimerApp> {
     }
   }
 
-  goToNextPhase() {
+  goToNextPhase() async {
+    if(phases[nextPhaseIndex] == "FOCUS"){
+        print("back to work");
+        SendNotification sendNotification = SendNotification(
+            id: firebaseToken,
+            title: "Break ended",
+            body: "Back to work!",
+            sound: "resume_work.wav");
+
+        SendNotification s =
+        await sendPost(body: sendNotification.toMap());
+        print(s);
+
+    } else if(phases[nextPhaseIndex] == "Small Break") {
+      print("break time");
+      SendNotification sendNotification = SendNotification(
+          id: firebaseToken,
+          title: "Focus phase ended",
+          body: "Take a small break, come back in 5 minutes",
+          sound: "phase_finished.wav");
+
+      SendNotification s =
+      await sendPost(body: sendNotification.toMap());
+      print(s);
+    } else {
+      print("break time");
+      SendNotification sendNotification = SendNotification(
+          id: firebaseToken,
+          title: "Focus phase ended",
+          body: "Time for a 30 minutes break. You deserve it!",
+          sound: "phase_finished.wav");
+
+      SendNotification s =
+      await sendPost(body: sendNotification.toMap());
+      print(s);
+    }
     if (mounted)
       this.setState(() {
         phaseStartingTime = DateTime.now();
@@ -101,7 +136,7 @@ class TimerAppState extends State<TimerApp> {
         await audioCache.play("phase_finished.wav");
     });
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(seconds: 1), (timer) async {
 
 
       if (remainingTimeUntilNextPhase == "00:01")
@@ -174,20 +209,7 @@ class TimerAppState extends State<TimerApp> {
                 iconSize: 40.0,
                 color: Colors.white,
               ),
-              RaisedButton(
-                onPressed: () async {
-                  print("pressed");
-                  SendNotification sendNotification = SendNotification(
-                      id: firebaseToken,
-                      title: "title",
-                      body: "body",
-                      sound: "default");
 
-                  SendNotification s =
-                      await sendPost(body: sendNotification.toMap());
-                  print(s);
-                },
-              ),
               SizedBox(height: 0.0),
               Text(
                 "Coming up : " + phases[nextPhaseIndex],

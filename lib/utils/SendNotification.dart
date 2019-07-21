@@ -24,6 +24,7 @@ class SendNotification {
     details["body"] = body;
     details['sound'] = sound;
     details['click_action']= 'FLUTTER_NOTIFICATION_CLICK';
+    details['priority'] = 'high';
     var send = json.encode(details);
     map["to"] = id;
     map["notification"] = send;
