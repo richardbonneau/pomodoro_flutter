@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:pomodoro/utils/SendNotification.dart';
+import 'package:pomodoro/widget/LocalNotificationWidget.dart';
 import 'package:audioplayers/audio_cache.dart';
 
 AudioCache audioCache = AudioCache();
@@ -123,6 +123,7 @@ class TimerAppState extends State<TimerApp> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              LocalNotificationWidget(),
               Text(timeWorked,
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
               SizedBox(height: 0.0),
