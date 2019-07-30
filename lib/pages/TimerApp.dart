@@ -1,26 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:audioplayers/audio_cache.dart';
 import 'package:pomodoro/utils/SendNotification.dart';
-import 'package:http/http.dart' as http;
+import 'package:audioplayers/audio_cache.dart';
 
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 AudioCache audioCache = AudioCache();
-var firebaseToken;
-
-Future<SendNotification> sendPost({Map body}) async {
-  print("body");
-  print(body);
-  return http.post('https://fcm.googleapis.com/fcm/send', headers: {
-    "Authorization":
-    "key=AAAA_WFZUOY:APA91bEK03Ls6a90pnkb48VNKKeFjCAeOJYwuRYe2AqbQLTyXgBz-Ctg6Da-vAblgrlzjHk61JIVY1fnIk9PZoRDs8byNHzuoVHgDCJ3HKbO-rWpzApAxn-NVZBT7ZlMrzHKstbprfKX",
-//    "content-type": "application/json"
-  },body: body, ).then((dynamic response) {
-    print(response.statusCode);
-    print("---");
-  });
-}
 
 class TimerApp extends StatefulWidget {
   @override
@@ -67,40 +50,12 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() async {
-    if(phases[nextPhaseIndex] == "FOCUS"){
-        print("back to work");
-        SendNotification sendNotification = SendNotification(
-            id: firebaseToken,
-            title: "Break ended",
-            body: "Back to work!",
-            sound: "resume_work.wav");
-
-        SendNotification s =
-        await sendPost(body: sendNotification.toMap());
-        print(s);
-
-    } else if(phases[nextPhaseIndex] == "Small Break") {
+    if (phases[nextPhaseIndex] == "FOCUS") {
+      print("back to work");
+    } else if (phases[nextPhaseIndex] == "Small Break") {
       print("break time");
-      SendNotification sendNotification = SendNotification(
-          id: firebaseToken,
-          title: "Focus phase ended",
-          body: "Take a small break, come back in 5 minutes",
-          sound: "phase_finished.wav");
-
-      SendNotification s =
-      await sendPost(body: sendNotification.toMap());
-      print(s);
     } else {
       print("break time");
-      SendNotification sendNotification = SendNotification(
-          id: firebaseToken,
-          title: "Focus phase ended",
-          body: "Time for a 30 minutes break. You deserve it!",
-          sound: "phase_finished.wav");
-
-      SendNotification s =
-      await sendPost(body: sendNotification.toMap());
-      print(s);
     }
     if (mounted)
       this.setState(() {
@@ -119,23 +74,7 @@ class TimerAppState extends State<TimerApp> {
   void initState() {
     super.initState();
 
-    //  Firebase base config
-    _firebaseMessaging.getToken().then((token) {
-      firebaseToken = token;
-      print(firebaseToken);
-    });
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print("received a message");
-      if (phases[currentPhaseIndex] == "FOCUS")
-        await audioCache.play("resume_work.wav");
-      else
-        await audioCache.play("phase_finished.wav");
-    });
-
     Timer.periodic(Duration(seconds: 1), (timer) async {
-
-
       if (remainingTimeUntilNextPhase == "00:01")
         this.goToNextPhase();
       else if (isAppPaused)
@@ -206,7 +145,6 @@ class TimerAppState extends State<TimerApp> {
                 iconSize: 40.0,
                 color: Colors.white,
               ),
-
               SizedBox(height: 0.0),
               Text(
                 "Coming up : " + phases[nextPhaseIndex],
