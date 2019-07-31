@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pomodoro/utils/LocalNotificationHelper.dart';
+import 'package:pomodoro/pages/TimerApp.dart';
 
 class LocalNotificationWidget extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _LocalNotificationWidgetState extends State<LocalNotificationWidget> {
   void initState() {
     super.initState();
 
-    final settingsAndroid = AndroidInitializationSettings('app_icon');
+    final settingsAndroid = AndroidInitializationSettings('icon.png');
     final settingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: (id, title, body, payload) =>
             onSelectNotification(payload));
@@ -25,12 +26,16 @@ class _LocalNotificationWidgetState extends State<LocalNotificationWidget> {
         onSelectNotification: onSelectNotification);
   }
 
-  Future onSelectNotification(String payload) async =>
-      await print("onSelectNotificaiton");
+  Future onSelectNotification(String payload) async => await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TimerApp()),
+      );
 
   @override
   Widget build(BuildContext context) => RaisedButton(
       child: Text("Notification"),
-      onPressed: () =>
-          showOngoingNotification(notifications, title: "title", body: "body"));
+      onPressed: () {
+        return showOngoingNotification(notifications,
+            title: "title", body: "body");
+      });
 }
