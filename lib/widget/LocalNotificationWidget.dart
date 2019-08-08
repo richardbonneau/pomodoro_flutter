@@ -32,10 +32,12 @@ class _LocalNotificationWidgetState extends State<LocalNotificationWidget> {
       );
 
   @override
-  Widget build(BuildContext context) => RaisedButton(
-      child: Text("Notification"),
-      onPressed: () {
-        return showOngoingNotification(notifications,
-            title: "title", body: "body");
-      });
+  Widget build(BuildContext context) => SizedBox.shrink();
+
+//      RaisedButton(
+//      child: Text("Notification"),
+//      onPressed: () {
+//        return showOngoingNotification(notifications,
+//            title: "title", body: "body");
+//      });
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:pomodoro/widget/LocalNotificationWidget.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:pomodoro/utils/LocalNotificationHelper.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 AudioCache audioCache = AudioCache();
 
@@ -11,6 +13,7 @@ class TimerApp extends StatefulWidget {
 }
 
 class TimerAppState extends State<TimerApp> {
+  final notifications = FlutterLocalNotificationsPlugin();
   DateTime startingTime = DateTime.now();
   String timeWorked = "0:00:01";
   List<String> phases = [
@@ -50,11 +53,20 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() async {
+    String notificationTitle = "";
+    String notificationBody = "";
     if (phases[nextPhaseIndex] == "FOCUS") {
+      notificationTitle = "Back to work!";
+      notificationBody = "Break's over ";
       print("back to work");
     } else if (phases[nextPhaseIndex] == "Small Break") {
+      notificationTitle = "Time for a break!";
+      notificationBody =
+          "This is your own time. Do whatever you want for 5 minutes.";
       print("break time");
     } else {
+      notificationTitle = "Time for a long break!";
+      notificationBody = "You deserve this. Step away from work for a while.";
       print("break time");
     }
     if (mounted)
@@ -68,6 +80,8 @@ class TimerAppState extends State<TimerApp> {
         else
           nextPhaseIndex = nextPhaseIndex + 1;
       });
+    showOngoingNotification(notifications,
+        title: notificationTitle, body: notificationBody);
   }
 
   @override
