@@ -32,6 +32,7 @@ class TimerAppState extends State<TimerApp> {
   var phaseTimes = {"FOCUS": 1, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
+  double circularProgress = 0.0;
 
   // Pause Button
   bool isAppPaused = false;
@@ -104,7 +105,11 @@ class TimerAppState extends State<TimerApp> {
           Duration(
               minutes: phaseTimes[phases[currentPhaseIndex]], seconds: -1) +
           appPauseDuration;
-      print(remainingTime);
+
+      circularProgress = 1 -
+          (remainingTime).inSeconds /
+              (Duration(minutes: phaseTimes[phases[currentPhaseIndex]])
+                  .inSeconds);
       // Clamps the duration over 0 seconds.
       if (remainingTime.isNegative) remainingTime = new Duration(seconds: 0);
       String stringifiedRemainingMinutes =
@@ -151,15 +156,18 @@ class TimerAppState extends State<TimerApp> {
                     child: Align(
                         alignment: Alignment.center,
                         child: SizedBox(
-                            height: 250.0,
-                            width: 250.0,
-                            child: CircularProgressIndicator(value: 1))),
-//                    width: MediaQuery.of(context).size.width,
-//                          height: MediaQuery.of(context).size.height
+                            height: 240.0,
+                            width: 240.0,
+                            child: CircularProgressIndicator(
+                              value: circularProgress,
+                              backgroundColor: Colors.white,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.blueAccent),
+                            ))),
                   ),
                   Positioned(
-                      top: 85.0,
-                      left: MediaQuery.of(context).size.width / 2 - 75.0,
+                      top: 80.0,
+                      left: MediaQuery.of(context).size.width / 2 - 77.0,
                       child: Align(
                           alignment: Alignment.center,
                           child: Text(remainingTimeUntilNextPhase,
