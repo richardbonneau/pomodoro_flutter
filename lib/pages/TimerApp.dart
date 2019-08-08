@@ -89,7 +89,7 @@ class TimerAppState extends State<TimerApp> {
     super.initState();
 
     Timer.periodic(Duration(seconds: 1), (timer) async {
-      if (remainingTimeUntilNextPhase == "00:01")
+      if (remainingTimeUntilNextPhase == "00:00")
         this.goToNextPhase();
       else if (isAppPaused)
         appPauseDuration = appPauseDuration + Duration(seconds: 1);
@@ -101,14 +101,17 @@ class TimerAppState extends State<TimerApp> {
 
       //  Phase Timer
       Duration remainingTime = phaseStartingTime.difference(DateTime.now()) +
-          Duration(minutes: phaseTimes[phases[currentPhaseIndex]]) +
+          Duration(
+              minutes: phaseTimes[phases[currentPhaseIndex]], seconds: -1) +
           appPauseDuration;
-
+      print(remainingTime);
+      // Clamps the duration over 0 seconds.
+      if (remainingTime.isNegative) remainingTime = new Duration(seconds: 0);
       String stringifiedRemainingMinutes =
           remainingTime.toString().substring(2, 5);
       // We need to math.round the microseconds, otherwise, the app skips seconds sometimes.
       String stringifiedRemainingSeconds =
-          (double.parse(remainingTime.toString().substring(5, 14)).round() - 1)
+          (double.parse(remainingTime.toString().substring(5, 14)).round())
               .toString();
 
       if (stringifiedRemainingSeconds.length == 1)
