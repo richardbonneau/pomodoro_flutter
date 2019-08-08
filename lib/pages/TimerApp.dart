@@ -145,11 +145,30 @@ class TimerAppState extends State<TimerApp> {
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
               SizedBox(height: 0.0),
               SizedBox(height: 0.0),
-              Text(remainingTimeUntilNextPhase,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 70.0,
-                      fontFamily: 'Roboto Condensed')),
+              Stack(
+                children: <Widget>[
+                  Positioned(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                            height: 250.0,
+                            width: 250.0,
+                            child: CircularProgressIndicator(value: 1))),
+//                    width: MediaQuery.of(context).size.width,
+//                          height: MediaQuery.of(context).size.height
+                  ),
+                  Positioned(
+                      top: 85.0,
+                      left: MediaQuery.of(context).size.width / 2 - 75.0,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text(remainingTimeUntilNextPhase,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 70.0,
+                                  fontFamily: 'Roboto Condensed'))))
+                ],
+              ),
               Text(
                 phases[currentPhaseIndex],
                 style: TextStyle(
