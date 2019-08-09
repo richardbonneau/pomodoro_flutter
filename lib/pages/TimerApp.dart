@@ -14,6 +14,7 @@ class TimerApp extends StatefulWidget {
 
 class TimerAppState extends State<TimerApp> {
   final notifications = FlutterLocalNotificationsPlugin();
+
   DateTime startingTime = DateTime.now();
   String timeWorked = "0:00:01";
   List<String> phases = [
@@ -89,6 +90,18 @@ class TimerAppState extends State<TimerApp> {
   void initState() {
     super.initState();
 
+    final settingsAndroid = AndroidInitializationSettings('icon');
+    final settingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: (id, title, body, payload) =>
+            onSelectNotification(payload));
+
+    notifications.initialize(
+        InitializationSettings(settingsAndroid, settingsIOS),
+        onSelectNotification: onSelectNotification);
+
+
+
+
     Timer.periodic(Duration(seconds: 1), (timer) async {
       if (remainingTimeUntilNextPhase == "00:00")
         this.goToNextPhase();
@@ -133,7 +146,7 @@ class TimerAppState extends State<TimerApp> {
       }
     });
   }
-
+  Future onSelectNotification(String payload) async => print("clicked");
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -145,11 +158,10 @@ class TimerAppState extends State<TimerApp> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              LocalNotificationWidget(),
+//              LocalNotificationWidget(),
               Text(timeWorked,
                   style: TextStyle(color: Colors.white, fontSize: 20.0)),
-              SizedBox(height: 0.0),
-              SizedBox(height: 0.0),
+              SizedBox(height: 50.0),
               Stack(
                 children: <Widget>[
                   Positioned(
@@ -166,7 +178,7 @@ class TimerAppState extends State<TimerApp> {
                             ))),
                   ),
                   Positioned(
-                      top: 80.0,
+                      top: 70.0,
                       left: MediaQuery.of(context).size.width / 2 - 77.0,
                       child: Align(
                           alignment: Alignment.center,
@@ -174,7 +186,16 @@ class TimerAppState extends State<TimerApp> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 70.0,
-                                  fontFamily: 'Roboto Condensed'))))
+                                  fontFamily: 'Roboto Condensed')))),
+                  Positioned(
+                    top: 160.0,
+                    left: MediaQuery.of(context).size.width / 2 - 27.0,
+                    child:IconButton(
+                    icon: pauseOrPlayIcon,
+                    onPressed: this.onPressPause,
+                    iconSize: 40.0,
+                    color: Colors.white,
+                  ),)
                 ],
               ),
               Text(
@@ -184,12 +205,7 @@ class TimerAppState extends State<TimerApp> {
                     color: Colors.white,
                     fontSize: 20.0),
               ),
-              IconButton(
-                icon: pauseOrPlayIcon,
-                onPressed: this.onPressPause,
-                iconSize: 40.0,
-                color: Colors.white,
-              ),
+
               SizedBox(height: 0.0),
               Text(
                 "Coming up : " + phases[nextPhaseIndex],

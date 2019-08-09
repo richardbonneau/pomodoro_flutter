@@ -10,6 +10,8 @@ NotificationDetails get _ongoing {
     priority: Priority.High,
     ongoing: true,
     autoCancel: false,
+    playSound: true,
+    sound:"/phase_finished.wav"
   );
   final iOSChannelSpecifics = IOSNotificationDetails();
   return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);

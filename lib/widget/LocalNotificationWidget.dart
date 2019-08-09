@@ -26,10 +26,8 @@ class _LocalNotificationWidgetState extends State<LocalNotificationWidget> {
         onSelectNotification: onSelectNotification);
   }
 
-  Future onSelectNotification(String payload) async => await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TimerApp()),
-      );
+  Future onSelectNotification(String payload) async => print("clicked");
+
 
   @override
   Widget build(BuildContext context) => SizedBox.shrink();
