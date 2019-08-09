@@ -17,6 +17,7 @@ class TimerAppState extends State<TimerApp> {
 
   DateTime startingTime = DateTime.now();
   String timeWorked = "0:00:01";
+  int sessionBeforeBigBreak = 4;
   List<String> phases = [
     "FOCUS",
     "Small Break",
@@ -34,6 +35,7 @@ class TimerAppState extends State<TimerApp> {
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
   double circularProgress = 0.0;
+  Icon currentPhaseIcon = Icon(Icons.computer);
 
   // Pause Button
   bool isAppPaused = false;
@@ -55,18 +57,28 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() async {
+    if (sessionBeforeBigBreak != 0)
+      sessionBeforeBigBreak -= 1;
+    else
+      sessionBeforeBigBreak = 4;
     String notificationTitle = "";
     String notificationBody = "";
+
     if (phases[nextPhaseIndex] == "FOCUS") {
+      currentPhaseIcon = Icon(
+        Icons.computer,
+      );
       notificationTitle = "Back to work!";
       notificationBody = "Break's over ";
       print("back to work");
     } else if (phases[nextPhaseIndex] == "Small Break") {
+      currentPhaseIcon = Icon(Icons.access_alarm);
       notificationTitle = "Time for a break!";
       notificationBody =
           "This is your own time. Do whatever you want for 5 minutes.";
       print("break time");
     } else {
+      currentPhaseIcon = Icon(Icons.access_alarm);
       notificationTitle = "Time for a long break!";
       notificationBody = "You deserve this. Step away from work for a while.";
       print("break time");
@@ -197,17 +209,29 @@ class TimerAppState extends State<TimerApp> {
                   )
                 ],
               ),
-              Text(
-                phases[currentPhaseIndex],
-                style: TextStyle(
-                    fontFamily: 'Roboto Condensed',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    icon: currentPhaseIcon,
+                    onPressed: this.onPressPause,
+                    iconSize: 30.0,
                     color: textColor,
-                    fontSize: 20.0),
+                  ),
+                  Text(
+                    phases[currentPhaseIndex],
+                    style: TextStyle(
+                        fontFamily: 'Roboto Condensed',
+                        color: textColor,
+                        fontSize: 25.0),
+                  ),
+                ],
               ),
 
               SizedBox(height: 55.0),
               Text(
-                "Coming up : " + phases[nextPhaseIndex],
+                "Focus sessions before big break: " +
+                    sessionBeforeBigBreak.toString(),
                 style:
                     TextStyle(fontFamily: 'Roboto Condensed', color: textColor),
               ),
