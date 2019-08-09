@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:pomodoro/widget/LocalNotificationWidget.dart';
+import 'package:pomodoro/utils/AppColors.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:pomodoro/utils/LocalNotificationHelper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -99,9 +99,6 @@ class TimerAppState extends State<TimerApp> {
         InitializationSettings(settingsAndroid, settingsIOS),
         onSelectNotification: onSelectNotification);
 
-
-
-
     Timer.periodic(Duration(seconds: 1), (timer) async {
       if (remainingTimeUntilNextPhase == "00:00")
         this.goToNextPhase();
@@ -146,11 +143,12 @@ class TimerAppState extends State<TimerApp> {
       }
     });
   }
+
   Future onSelectNotification(String payload) async => print("clicked");
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Color(0xFF18435A),
+      backgroundColor: mainBackgroundColor,
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
@@ -160,7 +158,7 @@ class TimerAppState extends State<TimerApp> {
             children: <Widget>[
 //              LocalNotificationWidget(),
               Text(timeWorked,
-                  style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                  style: TextStyle(color: textColor, fontSize: 20.0)),
               SizedBox(height: 50.0),
               Stack(
                 children: <Widget>[
@@ -172,9 +170,9 @@ class TimerAppState extends State<TimerApp> {
                             width: 240.0,
                             child: CircularProgressIndicator(
                               value: circularProgress,
-                              backgroundColor: Colors.white,
+                              backgroundColor: circleProgressBackgroundColor,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.blueAccent),
+                                  circleProgressBarColor),
                             ))),
                   ),
                   Positioned(
@@ -184,33 +182,34 @@ class TimerAppState extends State<TimerApp> {
                           alignment: Alignment.center,
                           child: Text(remainingTimeUntilNextPhase,
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: textColor,
                                   fontSize: 70.0,
                                   fontFamily: 'Roboto Condensed')))),
                   Positioned(
                     top: 160.0,
                     left: MediaQuery.of(context).size.width / 2 - 27.0,
-                    child:IconButton(
-                    icon: pauseOrPlayIcon,
-                    onPressed: this.onPressPause,
-                    iconSize: 40.0,
-                    color: Colors.white,
-                  ),)
+                    child: IconButton(
+                      icon: pauseOrPlayIcon,
+                      onPressed: this.onPressPause,
+                      iconSize: 40.0,
+                      color: textColor,
+                    ),
+                  )
                 ],
               ),
               Text(
                 phases[currentPhaseIndex],
                 style: TextStyle(
                     fontFamily: 'Roboto Condensed',
-                    color: Colors.white,
+                    color: textColor,
                     fontSize: 20.0),
               ),
 
-              SizedBox(height: 0.0),
+              SizedBox(height: 55.0),
               Text(
                 "Coming up : " + phases[nextPhaseIndex],
-                style: TextStyle(
-                    fontFamily: 'Roboto Condensed', color: Colors.white),
+                style:
+                    TextStyle(fontFamily: 'Roboto Condensed', color: textColor),
               ),
             ],
           ),

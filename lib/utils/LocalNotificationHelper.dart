@@ -11,7 +11,6 @@ NotificationDetails get _ongoing {
     ongoing: true,
     autoCancel: false,
     playSound: true,
-    sound:"/phase_finished.wav"
   );
   final iOSChannelSpecifics = IOSNotificationDetails();
   return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);

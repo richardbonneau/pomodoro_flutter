@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pomodoro/utils/AppColors.dart';
 
 import 'package:pomodoro/pages/TimerApp.dart';
 
@@ -9,10 +10,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Color(0xFF13293D),
+        statusBarColor: statusBarColor,
         statusBarIconBrightness: Brightness.light));
-    return MaterialApp(
-      home: new TimerApp()
-    );
+    return MaterialApp(home: new TimerApp());
   }
 }
