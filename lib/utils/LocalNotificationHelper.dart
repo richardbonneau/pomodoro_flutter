@@ -1,14 +1,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 
-NotificationDetails get _ongoing {
+NotificationDetails get normal {
   final androidChannelSpecifics = AndroidNotificationDetails(
     'your channel id',
     'your channel name',
     'your channel desc',
     importance: Importance.Max,
     priority: Priority.High,
-    ongoing: true,
     autoCancel: false,
     sound: "phase_finished",
 );
@@ -16,7 +15,7 @@ NotificationDetails get _ongoing {
   return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
 }
 
-Future showOngoingNotification(
+Future showNotification(
   FlutterLocalNotificationsPlugin notifications, {
   @required String title,
   @required String body,
@@ -24,7 +23,7 @@ Future showOngoingNotification(
 
 }) =>
     _showNotifications(notifications,
-        title: title, body: body, id: id, type: _ongoing);
+        title: title, body: body, id: id, type: normal);
 
 Future _showNotifications(
   FlutterLocalNotificationsPlugin notifications, {

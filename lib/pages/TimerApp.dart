@@ -32,7 +32,7 @@ class TimerAppState extends State<TimerApp> {
 
   String remainingTimeUntilNextPhase = "24:59";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"Focus Session": 25, "Small Break": 5, "Big Break": 30};
+  var phaseTimes = {"Focus Session": 1, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
   double circularProgress = 0.0;
@@ -95,7 +95,7 @@ class TimerAppState extends State<TimerApp> {
         else
           nextPhaseIndex = nextPhaseIndex + 1;
       });
-    showOngoingNotification(notifications,
+    showNotification(notifications,
         title: notificationTitle, body: notificationBody);
   }
 
@@ -103,7 +103,7 @@ class TimerAppState extends State<TimerApp> {
   void initState() {
     super.initState();
 
-    final settingsAndroid = AndroidInitializationSettings('icon');
+    final settingsAndroid = AndroidInitializationSettings('app_icon');
     final settingsIOS = IOSInitializationSettings(
         onDidReceiveLocalNotification: (id, title, body, payload) =>
             onSelectNotification(payload));
