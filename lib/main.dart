@@ -16,6 +16,6 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: statusBarColor,
         statusBarIconBrightness: Brightness.light));
-    return MaterialApp(home: new TimerApp());
+    return MaterialApp(home: new TimerApp(), debugShowCheckedModeBanner: false);
   }
 }
