@@ -1,4 +1,4 @@
-package com.richardbonneau.pomodoro;
+package com.richardbonneau.pomodoro_productivity;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

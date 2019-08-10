@@ -1,5 +1,5 @@
-name: pomodoro
-description: A new Flutter application.
+name: pomodoro_productivity
+description: Get productive
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -21,9 +21,6 @@ dependencies:
     sdk: flutter
   flutter_local_notifications: ^0.8.0
   audioplayers: ^0.13.1
-  http: ^0.12.0+2
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -35,19 +32,18 @@ dev_dependencies:
 
 
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+
+  assets:
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  assets:
-    - assets/
-
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -65,15 +61,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Roboto Condensed
-      fonts:
-        - asset: fonts/RobotoCondensed-Regular.ttf
-    - family:  CustomIcons
-      fonts:
-        - asset: fonts/custom-icons.ttf
-
-
   # fonts:
   #   - family: Schyler
   #     fonts:
@@ -85,6 +72,14 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+  fonts:
+    - family: Roboto Condensed
+      fonts:
+        - asset: fonts/RobotoCondensed-Regular.ttf
+    - family:  CustomIcons
+      fonts:
+        - asset: fonts/custom-icons.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

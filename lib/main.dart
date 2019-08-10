@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pomodoro/utils/AppColors.dart';
+import 'package:pomodoro_productivity/utils/AppColors.dart';
 
-import 'package:pomodoro/pages/TimerApp.dart';
+import 'package:pomodoro_productivity/pages/TimerApp.dart';
 
 void main() {
-SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MyApp());
 }
 
 

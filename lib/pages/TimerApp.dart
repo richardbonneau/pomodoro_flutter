@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:pomodoro/utils/AppColors.dart';
+import 'package:pomodoro_productivity/utils/AppColors.dart';
 import 'package:audioplayers/audio_cache.dart';
-import 'package:pomodoro/utils/LocalNotificationHelper.dart';
+import 'package:pomodoro_productivity/utils/LocalNotificationHelper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pomodoro/my_flutter_app_icons.dart';
+import 'package:pomodoro_productivity/utils/my_flutter_app_icons.dart';
 
 AudioCache audioCache = AudioCache();
 
@@ -32,7 +32,7 @@ class TimerAppState extends State<TimerApp> {
 
   String remainingTimeUntilNextPhase = "24:59";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"Focus Session": 1, "Small Break": 5, "Big Break": 30};
+  var phaseTimes = {"Focus Session": 1, "Small Break": 1, "Big Break": 1};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
   double circularProgress = 0.0;
@@ -44,14 +44,14 @@ class TimerAppState extends State<TimerApp> {
   Icon pauseOrPlayIcon = Icon(Icons.pause);
   onPressPause() async {
     if (!isAppPaused) {
-      await audioCache.play("pause.wav");
+      await audioCache.play("pause.wav",volume: 0.4);
       this.setState(() {
         isAppPaused = true;
 
         pauseOrPlayIcon = Icon(Icons.play_arrow);
       });
     } else {
-      await audioCache.play("play.wav");
+      await audioCache.play("play.wav", volume: 0.4);
       isAppPaused = false;
       this.setState(() => pauseOrPlayIcon = Icon(Icons.pause));
     }
@@ -63,23 +63,22 @@ class TimerAppState extends State<TimerApp> {
     String notificationBody = "";
 
     if (phases[nextPhaseIndex] == "Focus Session") {
-      if (sessionBeforeBigBreak != 0)
-        sessionBeforeBigBreak -= 1;
-      else
-        sessionBeforeBigBreak = 4;
+      if (sessionBeforeBigBreak == 0)sessionBeforeBigBreak = 4;
       currentPhaseIcon = Icon(
-        CustomIcons.center_focus_strong,
+        CustomIcons.laptop,
       );
       notificationTitle = "Back to work!";
-      notificationBody = "Break's over ";
+      notificationBody = "It's time to get in the flow";
       print("back to work");
     } else if (phases[nextPhaseIndex] == "Small Break") {
+      sessionBeforeBigBreak -= 1;
       currentPhaseIcon = Icon(CustomIcons.coffee);
       notificationTitle = "Time for a break!";
       notificationBody =
-          "This is your own time. Do whatever you want for 5 minutes.";
+          "This is your own time. Do what you want for 5 minutes.";
       print("break time");
     } else {
+      sessionBeforeBigBreak -= 1;
       currentPhaseIcon = Icon(CustomIcons.bed);
       notificationTitle = "Time for a long break!";
       notificationBody = "You deserve this. Step away from work for a while.";
@@ -170,7 +169,6 @@ class TimerAppState extends State<TimerApp> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-//              LocalNotificationWidget(),
               Text(timeWorked,
                   style: TextStyle(color: textColor, fontSize: 20.0)),
               SizedBox(height: 50.0),
@@ -223,9 +221,9 @@ class TimerAppState extends State<TimerApp> {
                   Text(
                     phases[currentPhaseIndex],
                     style: TextStyle(
-                        fontFamily: 'Roboto Condensed',
+                        fontFamily: 'Roboto',
                         color: textColor,
-                        fontSize: 25.0),
+                        fontSize: 20.0),
                   ),
                 ],
               ),
@@ -235,7 +233,7 @@ class TimerAppState extends State<TimerApp> {
 
                 sessionBeforeBigBreak.toString()+" Focus "+(sessionBeforeBigBreak == 1 ? "Session" : "Sessions" )+" before Big Break",
                 style:
-                    TextStyle(fontFamily: 'Roboto Condensed', color: textColor),
+                    TextStyle(fontFamily: 'Roboto', color: textColor),
               ),
             ],
           ),

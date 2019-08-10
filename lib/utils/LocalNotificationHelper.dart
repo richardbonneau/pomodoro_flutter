@@ -10,8 +10,8 @@ NotificationDetails get _ongoing {
     priority: Priority.High,
     ongoing: true,
     autoCancel: false,
-
-  );
+    sound: "phase_finished",
+);
   final iOSChannelSpecifics = IOSNotificationDetails();
   return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
 }
@@ -21,6 +21,7 @@ Future showOngoingNotification(
   @required String title,
   @required String body,
   int id = 0,
+
 }) =>
     _showNotifications(notifications,
         title: title, body: body, id: id, type: _ongoing);
