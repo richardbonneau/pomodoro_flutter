@@ -4,6 +4,7 @@ import 'package:pomodoro/utils/AppColors.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:pomodoro/utils/LocalNotificationHelper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pomodoro/my_flutter_app_icons.dart';
 
 AudioCache audioCache = AudioCache();
 
@@ -19,23 +20,23 @@ class TimerAppState extends State<TimerApp> {
   String timeWorked = "0:00:01";
   int sessionBeforeBigBreak = 4;
   List<String> phases = [
-    "FOCUS",
+    "Focus Session",
     "Small Break",
-    "FOCUS",
+    "Focus Session",
     "Small Break",
-    "FOCUS",
+    "Focus Session",
     "Small Break",
-    "FOCUS",
+    "Focus Session",
     "Big Break"
   ];
 
   String remainingTimeUntilNextPhase = "24:59";
   DateTime phaseStartingTime = DateTime.now();
-  var phaseTimes = {"FOCUS": 1, "Small Break": 5, "Big Break": 30};
+  var phaseTimes = {"Focus Session": 1, "Small Break": 5, "Big Break": 30};
   int currentPhaseIndex = 0;
   int nextPhaseIndex = 1;
   double circularProgress = 0.0;
-  Icon currentPhaseIcon = Icon(Icons.computer);
+  Icon currentPhaseIcon = Icon(CustomIcons.laptop);
 
   // Pause Button
   bool isAppPaused = false;
@@ -57,28 +58,29 @@ class TimerAppState extends State<TimerApp> {
   }
 
   goToNextPhase() async {
-    if (sessionBeforeBigBreak != 0)
-      sessionBeforeBigBreak -= 1;
-    else
-      sessionBeforeBigBreak = 4;
+
     String notificationTitle = "";
     String notificationBody = "";
 
-    if (phases[nextPhaseIndex] == "FOCUS") {
+    if (phases[nextPhaseIndex] == "Focus Session") {
+      if (sessionBeforeBigBreak != 0)
+        sessionBeforeBigBreak -= 1;
+      else
+        sessionBeforeBigBreak = 4;
       currentPhaseIcon = Icon(
-        Icons.computer,
+        CustomIcons.center_focus_strong,
       );
       notificationTitle = "Back to work!";
       notificationBody = "Break's over ";
       print("back to work");
     } else if (phases[nextPhaseIndex] == "Small Break") {
-      currentPhaseIcon = Icon(Icons.access_alarm);
+      currentPhaseIcon = Icon(CustomIcons.coffee);
       notificationTitle = "Time for a break!";
       notificationBody =
           "This is your own time. Do whatever you want for 5 minutes.";
       print("break time");
     } else {
-      currentPhaseIcon = Icon(Icons.access_alarm);
+      currentPhaseIcon = Icon(CustomIcons.bed);
       notificationTitle = "Time for a long break!";
       notificationBody = "You deserve this. Step away from work for a while.";
       print("break time");
@@ -215,7 +217,7 @@ class TimerAppState extends State<TimerApp> {
                   IconButton(
                     icon: currentPhaseIcon,
                     onPressed: this.onPressPause,
-                    iconSize: 30.0,
+                    iconSize: 25.0,
                     color: textColor,
                   ),
                   Text(
@@ -230,8 +232,8 @@ class TimerAppState extends State<TimerApp> {
 
               SizedBox(height: 55.0),
               Text(
-                "Focus sessions before big break: " +
-                    sessionBeforeBigBreak.toString(),
+
+                sessionBeforeBigBreak.toString()+" Focus "+(sessionBeforeBigBreak == 1 ? "Session" : "Sessions" )+" before Big Break",
                 style:
                     TextStyle(fontFamily: 'Roboto Condensed', color: textColor),
               ),

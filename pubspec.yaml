@@ -69,6 +69,11 @@ flutter:
     - family: Roboto Condensed
       fonts:
         - asset: fonts/RobotoCondensed-Regular.ttf
+    - family:  CustomIcons
+      fonts:
+        - asset: fonts/custom-icons.ttf
+
+
   # fonts:
   #   - family: Schyler
   #     fonts:

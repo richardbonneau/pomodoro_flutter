@@ -4,7 +4,11 @@ import 'package:pomodoro/utils/AppColors.dart';
 
 import 'package:pomodoro/pages/TimerApp.dart';
 
-void main() => runApp(MyApp());
+void main() {
+SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+runApp(MyApp());
+}
+
 
 class MyApp extends StatelessWidget {
   @override
