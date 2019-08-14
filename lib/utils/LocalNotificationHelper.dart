@@ -21,15 +21,16 @@ Future showNotification(
   @required String body,
   int id = 0,
 
-}) =>
-    _showNotifications(notifications,
-        title: title, body: body, id: id, type: normal);
+}) {
+    print(title.toString()+ body.toString()+ id.toString()+ notifications.toString());
+  return _showNotifications(notifications,
+    title: title, body: body, type: normal);}
+
 
 Future _showNotifications(
   FlutterLocalNotificationsPlugin notifications, {
   @required String title,
   @required String body,
   @required NotificationDetails type,
-  int id = 0,
 }) =>
-    notifications.show(id, title, body, type);
+    notifications.show(0, title, body, type);
